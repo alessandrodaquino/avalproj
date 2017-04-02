@@ -1,0 +1,17 @@
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html ng-app="avalApp">
+    <head>
+         <script src="{% static 'scripts/js/base/angular.min.js' %}"></script>
+         <script src="{% static 'scripts/js/controllers/aval.js' %}"></script>
+         <link rel="stylesheet" type="text/css" href="{% static 'scripts/bootstrap-3.3.7-dist/css/bootstrap.min.css' %}">
+         <link rel="stylesheet" type="text/css" href="{% static 'scripts/css/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+         <link rel="stylesheet" type="text/css" href="{% static 'scripts/css/custom.css' %}">
+         
+    </head>
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
