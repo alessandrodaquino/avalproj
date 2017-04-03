@@ -1,39 +1,69 @@
-angular.module('avalApp', [])
-    .controller('MainController', function() {
-    var mainCtlr = this;
-    
-    // mainCtlr.magic = function(){
-    //     alert('nice')
-    //     console.log('nice')
-    // };
+angular
+    .module('AvalApp', ['ngRoute'])
+    .config(aval_config)
+    .controller('LoginCtrl', LoginCtrl)
+    .controller('QuestController', QuestController)
 
-    mainCtlr.senddata = function(){
-        alert('lalalallala')
-        console.log('aaaaaaa')
-        console.log(mainCtlr.name)
-    };
-    // todoList.todos = [
-    //   {text:'learn AngularJS', done:true},
-    //   {text:'build an AngularJS app', done:false}];
- 
-    // todoList.addTodo = function() {
-    //   todoList.todos.push({text:todoList.todoText, done:false});
-    //   todoList.todoText = '';
-    // };
- 
-    // todoList.remaining = function() {
-    //   var count = 0;
-    //   angular.forEach(todoList.todos, function(todo) {
-    //     count += todo.done ? 0 : 1;
-    //   });
-    //   return count;
-    // };
- 
-    // todoList.archive = function() {
-    //   var oldTodos = todoList.todos;
-    //   todoList.todos = [];
-    //   angular.forEach(oldTodos, function(todo) {
-    //     if (!todo.done) todoList.todos.push(todo);
-    //   });
-    // };
-});
+var url = '/aval/'
+
+function LoginCtrl( $scope, $http, $location ) {
+    $scope.login = {};
+    $scope.enablebtn = true;
+    
+    $scope.senddata = function(){
+        $scope.login.page = 'login'
+        $http.post(url, $scope.login)
+            .then(function(response){
+                if (response.data.status == 'ok'){
+                    $location.path('/questionario/')
+                }else{
+                    console.log(response.data.msg)
+                }   
+            }
+        );
+    }
+}
+LoginCtrl.$inject = ['$scope', '$http', '$location'];
+
+function QuestController($scope, $http, $location){
+    console.log('questionários baby...')
+}
+QuestController.$inject = ['$scope', '$http', '$location'];
+
+function aval_config( $routeProvider ) {
+    var pfx = '/static/templates/';
+
+    $routeProvider
+        .when( '/',                            { templateUrl: pfx + 'main.html'            })
+        .when( '/questionario/',         { templateUrl: pfx + 'quest.html'         })
+        .otherwise({redirectTo: '/' })
+        ;
+}
+aval_config.$inject = [ '$routeProvider' ];
+
+// angular.module('avalApp', [])
+//     .controller('MainController', function($http) {
+//     var mainCtlr = this;
+//     var url = '/candidate/'
+//     var candidate_id = null
+
+//     mainCtlr.magic = function(){
+//         alert('nice')
+//         console.log('nice')
+//     };
+
+//     mainCtlr.senddata = function(){
+//         //TODO - criar validação dos campos de nome e email
+//         var post_data = {}
+//         post_data.page = 'login'
+//         post_data.name = mainCtlr.name;
+//         post_data.email = mainCtlr.email;
+//         $http.post(url, post_data).then(function(response){
+//                 var data = response.data
+//                 if (response.status == 200 && data.status == 'ok') {
+//                     $http.get(url+'?page=questionario')
+//                 }
+//             });
+//     };
+
+// });

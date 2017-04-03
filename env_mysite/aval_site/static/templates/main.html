@@ -1,0 +1,26 @@
+<div ng-controller="LoginCtrl" class="main-box">
+    <h2> Olá! Este é o processo de avaliação de candidatos </h2>
+    <p> Informe seus dados para prosseguir. </p>
+    <br>
+    <div>
+        <form class="form-horizontal" ng-submit="senddata()" name="loginform">
+            <div class="form-group">
+                <label for="inputName" class="col-sm-2 control-label">Nome Completo</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="inputName" ng-model="login.name" placeholder="Nome Completo">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail" class="col-sm-2 control-label">E-mail</label>
+                <div class="col-sm-4">
+                    <input type="email" class="form-control" id="inputEmail" ng-model="login.email" placeholder="E-mail">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input class="btn btn-primary" value="Prosseguir" type="submit" ng-disabled="!enablebtn">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

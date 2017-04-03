@@ -14,9 +14,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from aval_site.views import start
+from aval_site import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', start),
+    url(r'^$', views.start),
+    url(r'^aval/', views.route),
 ]
