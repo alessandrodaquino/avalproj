@@ -1,28 +1,24 @@
 
 <div ng-controller="QuestController" class="main-box">
-<!--<div ng-controller="MainController as mainCtlr" class="main-box">-->
-    <h2> Página do Questionário </h2>
-    <!--<p> Informe seus dados para prosseguir. </p>
+    <h2> Queremos saber um pouco mais sobre você... </h2>
+    <p> Para cada item a baixo, informe o seu grau de conhecimento, considerando 0 (zero) como "Não conheço" e 10 como "Expert". </p>
     <br>
     <div>
-        <form class="form-horizontal" ng-submit="mainCtlr.senddata()" name="loginform">
-            <div class="form-group">
-                <label for="inputName" class="col-sm-2 control-label">Nome Completo</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputName" ng-model="mainCtlr.name" placeholder="Nome Completo">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputEmail" class="col-sm-2 control-label">E-mail</label>
-                <div class="col-sm-4">
-                    <input type="email" class="form-control" id="inputEmail" ng-model="mainCtlr.email" placeholder="E-mail">
+        <form class="form-horizontal" ng-submit="senddata()" name="questform">
+            <div ng-form="question" ng-repeat="(k, v) in qtn_list"> 
+                
+                <div class="form-group">
+                    <label for="input" class="col-sm-1 control-label">{{ k+1 }}) {{ v.description }} </label>
+                    <div class="col-sm-4">
+                        <select id="id_resp_horasini"   style="width:18%" ng-model="v.op"   ng-options="x.val as x.desc for x in opts"  ></select>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <input class="btn btn-primary" value="Prosseguir" type="submit">
+                    <input class="btn btn-primary" value="Concluir" type="submit">
                 </div>
             </div>
         </form>
-    </div>-->
+    </div>
 </div>
