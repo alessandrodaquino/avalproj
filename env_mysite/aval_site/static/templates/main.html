@@ -8,7 +8,7 @@
                 <label for="inputName" class="col-sm-2 control-label">Nome Completo</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="inputName" ng-model="login.name" placeholder="Nome Completo" required> 
-                    <!--<span ng-hide="valid_input.name" class="error_msg"> Campo inválido </span>-->
+                    <span ng-hide="valid_input.name" class="error_msg"> Campo inválido </span>
                 </div>
             </div>
             <div class="form-group">
@@ -21,6 +21,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <input class="btn btn-primary" value="Prosseguir" type="submit" ng-disabled="!enablebtn">
+                    <br><span class="error_msg" ng-show="err_msg"> {{err_msg}} </span>
                 </div>
             </div>
         </form>

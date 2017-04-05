@@ -15,6 +15,9 @@ function LoginCtrl( $scope, $http, $location ) {
     $scope.err_msg = ''
 
     $scope.senddata = function(){
+        $scope.valid_input.name = true;
+        $scope.valid_input.email = true;
+        $scope.err_msg = ''
         $scope.login.page = 'login'
         $http.post(url, $scope.login)
             .then(function(response){
@@ -24,8 +27,10 @@ function LoginCtrl( $scope, $http, $location ) {
                 }else{
                     console.log(response.data)
                     $scope.err_msg = response.data.msg;
-                    $scope.valid_input.name = response.data.fname;
-                    $scope.valid_input.femail = response.data.femail;
+                    if (response.data.status != 'cand_exists'){
+                        $scope.valid_input.name = response.data.fname;
+                        $scope.valid_input.femail = response.data.femail;
+                    }
                 }   
             }
         );
@@ -60,7 +65,8 @@ function QuestController($scope, $http, $location, $routeParams){
             .then(function(response){
                 console.log(response.data)
                 if (response.data.status == 'ok'){
-                    
+                    alert('Obrigado por se cadastrar. \n Enviamos um e-mail confirmando seu cadastro.')
+                    $location.path('/')
                 }
             });
     };

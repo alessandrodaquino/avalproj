@@ -20,6 +20,17 @@ def is_valid_string(s):
 
     return False
 
+def check_questions_answered(db, idcandidate):
+    done = True
+
+    db.execute("SELECT 1 FROM AVAL_ANSWERS WHERE CANDIDATE_ID = %s", [idcandidate])
+    row = db.fetchone()
+
+    if row is None:
+        done = False
+
+    return done
+
 def create_candidate(db, post_data):
     cand = Candidates(name=post_data['name'], email=post_data['email'])
     cand.save()
@@ -27,7 +38,7 @@ def create_candidate(db, post_data):
 
 def login_page_post(request, post_data):
     db = connection.cursor()
-    db.execute("SELECT 1 FROM AVAL_CANDIDATES WHERE EMAIL = %s", [post_data['email']])
+    db.execute("SELECT id FROM AVAL_CANDIDATES WHERE EMAIL = %s", [post_data['email']])
     row = db.fetchone()
 
     if row is None:
@@ -37,10 +48,17 @@ def login_page_post(request, post_data):
             'idcandidate': id
         })
     else:
-        return JsonResponse({
-            'status': 'cand_exists',
-            'msg': 'Candidato já cadastrado. Obrigado pelo interesse.'
-        })
+        done = check_questions_answered(db, row[0])
+        if done:
+            return JsonResponse({
+                'status': 'cand_exists',
+                'msg': 'Candidato já cadastrado. Obrigado pelo interesse.'
+            })
+        else:
+            return JsonResponse({
+                'status': 'ok',
+                'idcandidate': row[0]
+            })
 
     return JsonResponse({'status': 'err', 'msg': 'Erro desconhecido'})
 
@@ -98,17 +116,6 @@ def load_question_list(db, get_data):
         result.append(dict(rowset))
     return result
 
-def check_questions_answered(db, idcandidate):
-    done = True
-
-    db.execute("SELECT 1 FROM AVAL_ANSWERS WHERE CANDIDATE_ID = %s", [idcandidate])
-    row = db.fetchone()
-
-    if row is None:
-        done = False
-
-    return done
-
 def check_existing_candidate(db, idcandidate):
     exists = True
 
@@ -144,6 +151,7 @@ def isok_skill(val):
     return False
 
 def send(dest, subj, msg):
+    #TODO - Gerar nova chave e colocar em variavel de ambiente 
     sg = sendgrid.SendGridAPIClient(apikey='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')
     data = {
     "personalizations": [
@@ -166,20 +174,17 @@ def send(dest, subj, msg):
         }
     ]
     }
-    response = sg.client.mail.send.post(request_body=data)
-    print(response.status_code)
-    print(response.body)
-    print(response.headers)
+    sg.client.mail.send.post(request_body=data)
 
 
 def send_mail(where, idcandidate):
     subj = 'Obrigado por se candidatar'
     msg = 'Error'
+
     db = connection.cursor()
     db.execute('select email from aval_candidates where id = %s', [idcandidate])
     mail = db.fetchone()[0]
-    print(where)
-    print(mail)
+
     if where == 'frontend':
         msg = 'Obrigado por se candidatar, assim que tivermos uma vaga disponível para programador Front-End entraremos em contato.'
     elif where == 'backend':
@@ -225,14 +230,16 @@ def save_answers(request, post_data):
         if answ['id'] == 1:
             html = isok_skill(answ['op'])
         elif answ['id'] == 2:
-            javascript = isok_skill(answ['op'])
+            css = isok_skill(answ['op'])
         elif answ['id'] == 3:
-            pyth = isok_skill(answ['op'])
+            javascript = isok_skill(answ['op'])
         elif answ['id'] == 4:
-            djan = isok_skill(answ['op'])
+            pyth = isok_skill(answ['op'])
         elif answ['id'] == 5:
-            android = isok_skill(answ['op'])
+            djan = isok_skill(answ['op'])
         elif answ['id'] == 6:
+            android = isok_skill(answ['op'])
+        elif answ['id'] == 7:
             ios = isok_skill(answ['op'])
 
     if html and javascript and css:
@@ -258,7 +265,7 @@ def fix_get_data(request):
     get_data = {}
     if request.method == 'GET':
         get_data = dict(request.GET.dict())
-    
+
     return get_data
 
 def route(request):
