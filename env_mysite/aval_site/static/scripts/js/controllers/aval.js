@@ -55,8 +55,10 @@ function QuestController($scope, $http, $location, $routeParams){
     $scope.senddata = function(){
         $scope.answer.page = 'quest'
         $scope.answer.answers = $scope.qtn_list
+        $scope.answer.idcandidate = idcandidate
         $http.post(url, $scope.answer)
             .then(function(response){
+                console.log(response.data)
                 if (response.data.status == 'ok'){
                     
                 }
@@ -65,10 +67,13 @@ function QuestController($scope, $http, $location, $routeParams){
 
     $scope.onload = function(){
         console.log(idcandidate)
-        $http.get(url + '?page=quest')
+        $http.get(url + '?page=quest&idcandidate='+idcandidate)
             .then(function(response){
                 if (response.data.status == 'ok'){
                     $scope.qtn_list = JSON.parse(response.data.questions)
+                }else if(response.data.status == 'completed' || response.data.status == 'not_found'){
+                    alert(response.data.msg)//sim, não é elegante, é horrivel usar isso
+                    $location.path('/')
                 }
             }
         );
